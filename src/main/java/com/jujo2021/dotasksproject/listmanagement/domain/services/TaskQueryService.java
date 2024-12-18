@@ -13,6 +13,5 @@ import java.util.Optional;
 public interface TaskQueryService {
     List<Task> handle(GetAllTasksQuery query); // Obtiene todas las tareas
     Optional<Task> handle(GetTaskByIdQuery query); // Obtiene una tarea por su ID
-    List<Task> handle(GetTasksByTaskListIdQuery query); // Obtiene tareas de una lista de tareas por su ID
     Optional<Task> handle(GetTasksByNameQuery query); // Obtiene tareas por su nombre
 }

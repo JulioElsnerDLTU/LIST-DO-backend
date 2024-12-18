@@ -13,11 +13,16 @@ import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.resources.Task
 import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.resources.TaskResource;
 import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.transform.TaskListResourceFromEntityAssembler;
 import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.transform.TaskResourceFromEntityAssembler;
+import com.jujo2021.dotasksproject.profiles.domain.model.queries.GetAllProfilesQuery;
 import com.jujo2021.dotasksproject.profiles.domain.services.ProfileCommandService;
 import com.jujo2021.dotasksproject.profiles.domain.services.ProfileQueryService;
+import com.jujo2021.dotasksproject.profiles.interfaces.rest.resources.ProfileResource;
+import com.jujo2021.dotasksproject.profiles.interfaces.rest.transform.ProfileResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -34,16 +39,10 @@ public class TaskListController {
         this.taskListQueryService = taskListQueryService;
     }
 
-    /**
-     * Create a new task List
-     * @param createTaskListResource
-     * @return
-     */
     @PostMapping
     public Long createTask(CreateTaskListResource createTaskListResource) {
         return taskListCommandService.handle(new CreateTaskListCommand(createTaskListResource.title(), createTaskListResource.description()));
     }
-
 
     @GetMapping("/{taskListId}")
     public ResponseEntity<TaskListResource> getTaskListById(@PathVariable Long taskListId) {
@@ -54,40 +53,24 @@ public class TaskListController {
         return ResponseEntity.ok(taskListResource);
     }
 
-    /**
-     * Get All Tasks
-     * @param taskListId
-     * @return
-     */
     @GetMapping
-    public ResponseEntity<TaskListResource> getAllTaskLists(@PathVariable Long taskListId) {
-        var getTaskListByIdQuery = new GetTaskListByIdQuery(taskListId);
-        var task = taskListQueryService.handle(getTaskListByIdQuery);
-        if (task.isEmpty()) return ResponseEntity.badRequest().build();
-        var taskListResource = TaskListResourceFromEntityAssembler.toResourceFromEntity(task.get());
-        return ResponseEntity.ok(taskListResource);
+    public ResponseEntity<List<TaskListResource>> getAllTaskLists() {
+        var getAllTaskListQuery = new GetAllTaskListQuery();
+        var taskLists = taskListQueryService.handle(getAllTaskListQuery);
+        var taskListResources = taskLists.stream().map(TaskListResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(taskListResources);
     }
 
-
-    /**
-     * Get Task by Name
-     * @param title
-     * @return
-     */
-    @GetMapping
-    public ResponseEntity<TaskListResource> findByTitle(@PathVariable String title) {
+    // Change the path for the 'findByTitle' method to avoid the conflict
+    @GetMapping("/search")
+    public ResponseEntity<TaskListResource> findByTitle(@RequestParam String title) {
         var GetTaskListByTitleQuery = new GetTaskListByTitleQuery(title);
         var taskList = taskListQueryService.handle(GetTaskListByTitleQuery);
         if (taskList.isEmpty()) return ResponseEntity.badRequest().build();
-        var taskListResource = TaskListResourceFromEntityAssembler.toResourceFromEntity(taskList.get()); //Optional
+        var taskListResource = TaskListResourceFromEntityAssembler.toResourceFromEntity(taskList.get()); // Optional
         return ResponseEntity.ok(taskListResource);
     }
 
-    /**
-     * Delete a Task
-     * @param taskListId
-     * @return
-     */
     @DeleteMapping("/{taskId}")
     public ResponseEntity<?> deletetaskList(@PathVariable Long taskListId) {
         var deletetaskListCommand = new DeleteTaskListCommand(taskListId);

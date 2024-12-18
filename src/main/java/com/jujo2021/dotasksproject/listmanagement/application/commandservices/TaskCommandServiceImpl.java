@@ -7,9 +7,11 @@ import com.jujo2021.dotasksproject.listmanagement.domain.model.commands.DeleteTa
 import com.jujo2021.dotasksproject.listmanagement.domain.model.commands.UpdateTaskCommand;
 import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskCommandService;
 import com.jujo2021.dotasksproject.listmanagement.infrastructure.persistence.jpa.repositories.TaskRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class TaskCommandServiceImpl implements TaskCommandService {
 
     private final TaskRepository taskRepository;

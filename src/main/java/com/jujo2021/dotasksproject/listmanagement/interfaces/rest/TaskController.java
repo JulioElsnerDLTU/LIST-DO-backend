@@ -1,6 +1,7 @@
 package com.jujo2021.dotasksproject.listmanagement.interfaces.rest;
 import com.jujo2021.dotasksproject.listmanagement.domain.model.commands.CreateTaskCommand;
 import com.jujo2021.dotasksproject.listmanagement.domain.model.commands.DeleteTaskCommand;
+import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetAllTasksQuery;
 import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetTaskByIdQuery;
 import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetTasksByNameQuery;
 import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskCommandService;
@@ -11,6 +12,9 @@ import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.transform.Task
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -49,16 +53,17 @@ public class TaskController {
 
     /**
      * Get All Tasks
-     * @param taskId
+     * @param
      * @return
      */
     @GetMapping
-    public ResponseEntity<TaskResource> getAllTasks(@PathVariable Long taskId) {
-        var getTaskByIdQuery = new GetTaskByIdQuery(taskId);
-        var task = taskQueryService.handle(getTaskByIdQuery);
-        if (task.isEmpty()) return ResponseEntity.badRequest().build();
-        var taskResource = TaskResourceFromEntityAssembler.toResourceFromEntity(task.get());
-        return ResponseEntity.ok(taskResource);
+    public ResponseEntity<List<TaskResource>> getAllTasks() {
+        var getAllTasksQuery = new GetAllTasksQuery();
+        var tasks = taskQueryService.handle(getAllTasksQuery);
+        var taskResources = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(taskResources);
     }
 
 
@@ -67,7 +72,7 @@ public class TaskController {
      * @param name
      * @return
      */
-    @GetMapping
+    @GetMapping("/name/{name}")
     public ResponseEntity<TaskResource> getTaskByName(@PathVariable String name) {
         var getTasksByNameQuery = new GetTasksByNameQuery(name);
         var task = taskQueryService.handle(getTasksByNameQuery);

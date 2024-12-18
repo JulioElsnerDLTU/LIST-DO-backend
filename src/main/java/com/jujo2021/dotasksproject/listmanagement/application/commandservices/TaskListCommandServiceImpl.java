@@ -8,9 +8,11 @@ import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskCommandSer
 import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskListCommandService;
 import com.jujo2021.dotasksproject.listmanagement.infrastructure.persistence.jpa.repositories.TaskListRepository;
 import com.jujo2021.dotasksproject.profiles.domain.model.aggregates.Profile;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class TaskListCommandServiceImpl implements TaskListCommandService {
 
     private final TaskListRepository taskListRepository;

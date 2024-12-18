@@ -7,10 +7,12 @@ import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetTaskLi
 import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskListQueryService;
 import com.jujo2021.dotasksproject.listmanagement.infrastructure.persistence.jpa.repositories.TaskListRepository;
 import com.jujo2021.dotasksproject.listmanagement.interfaces.rest.resources.TaskListResource;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TaskListQueryServiceImpl implements TaskListQueryService {
 
     private final TaskListRepository taskListRepository;
@@ -33,4 +35,6 @@ public class TaskListQueryServiceImpl implements TaskListQueryService {
     public Optional<TaskList> handle(GetTaskListByTitleQuery query) {
         return taskListRepository.findByTitle(query.title());
     }
+
+
 }

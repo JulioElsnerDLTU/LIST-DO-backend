@@ -7,10 +7,12 @@ import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetTasksB
 import com.jujo2021.dotasksproject.listmanagement.domain.model.queries.GetTasksByTaskListIdQuery;
 import com.jujo2021.dotasksproject.listmanagement.domain.services.TaskQueryService;
 import com.jujo2021.dotasksproject.listmanagement.infrastructure.persistence.jpa.repositories.TaskRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TaskQueryServiceImpl implements TaskQueryService {
 
     private final TaskRepository taskRepository;
@@ -30,10 +32,7 @@ public class TaskQueryServiceImpl implements TaskQueryService {
         return taskRepository.findById(query.id());
     }
 
-    @Override
-    public List<Task> handle(GetTasksByTaskListIdQuery query) {
-        return taskRepository.findByTaskListId(query.taskListId());
-    }
+
 
     @Override
     public Optional<Task> handle(GetTasksByNameQuery query) {

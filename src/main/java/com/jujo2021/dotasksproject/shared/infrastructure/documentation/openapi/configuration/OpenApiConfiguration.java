@@ -24,7 +24,7 @@ public class OpenApiConfiguration {
                         .license(new License().name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("DO-LIST Platform Documentation")
+                        .description("DO-LIST Platform Documentation_ Created By: Julio Elsner DLTU")
                         .url("https://github.com/JulioElsnerDLTU/LIST-DO-backend"));
 
         // Add security scheme
